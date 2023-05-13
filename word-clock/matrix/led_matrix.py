@@ -49,7 +49,7 @@ class LedMatrix:
                 self.socket.sendall(commands.encode())
                 # print(f"Sent commands:\n{commands}")
             except socket.error:
-                print('Socket is no longer connected')
+                print('Refreshing socket connection')
                 self.socket.close()
                 # perform reconnection
                 self.socket = self._get_socket()
