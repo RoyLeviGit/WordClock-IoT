@@ -1,0 +1,90 @@
+#include <WiFi.h>
+#include <Adafruit_NeoPixel.h>
+
+const char* ssid = "AroinaHome";
+const char* password = "11235813";
+// const char* ssid = "Roys iPhone";
+// const char* password = "12345678";
+
+#define PIN       5 // NeoPixel data pin
+#define NUMPIXELS 132 // Number of pixels in your matrix (11x12)
+
+Adafruit_NeoPixel pixels(NUMPIXELS, PIN, NEO_GRB + NEO_KHZ800);
+
+WiFiServer server(80); // Set up the server on port 80
+
+void setup() {
+  Serial.begin(115200);
+  pixels.begin();
+  pixels.show(); // Initialize all pixels to 'off'
+
+  // Connect to Wi-Fi
+  Serial.print("Connecting to ");
+  Serial.println(ssid);
+  WiFi.begin(ssid, password);
+  while (WiFi.status() != WL_CONNECTED) {
+    delay(500);
+    Serial.print(".");
+  }
+  Serial.println(" connected");
+
+  // Start the server
+  server.begin();
+  Serial.print("Server started. IP: ");
+  Serial.println(WiFi.localIP());
+}
+
+unsigned long start_time = millis();
+
+void loop() {
+  WiFiClient client = server.available(); // Listen for incoming clients
+
+  if (client) {
+    String request = client.readStringUntil('\n');
+    // client.flush();
+
+    Serial.printf("refresh time:%lu\n", millis() - start_time);
+    // Record the start time
+    start_time = millis();
+
+    // Process each line of the request separately
+    int start_index = 0;
+    while (true) {
+      // Find the end of the current line
+      int end_index = request.indexOf('\n', start_index);
+      if (end_index == -1) {
+        end_index = request.length();
+      }
+
+      // Extract the current line
+      String line = request.substring(start_index, end_index);
+      Serial.print(line);
+
+      if (line.startsWith("C")) {
+        int pixelIndex = line.substring(1, line.indexOf(',')).toInt();
+        int red = line.substring(line.indexOf(',') + 1, line.indexOf(',', line.indexOf(',') + 1)).toInt();
+        int green = line.substring(line.indexOf(',', line.indexOf(',') + 1) + 1, line.indexOf(',', line.indexOf(',', line.indexOf(',') + 1) + 1)).toInt();
+        int blue = line.substring(line.indexOf(',', line.indexOf(',', line.indexOf(',') + 1) + 1) + 1).toInt();
+
+        // Set pixel color and show the change
+        pixels.setPixelColor(pixelIndex, pixels.Color(green, red, blue));
+
+        // Record time to set pixel
+        Serial.printf(" time passed:%lu\n", millis() - start_time);
+      }
+
+      // Move to the next line
+      if (end_index == request.length()) {
+        break;
+      } else {
+        start_index = end_index + 1;
+      }
+    }
+    // Record the end time
+    Serial.printf("latancy time:%lu\n", millis() - start_time);
+
+    pixels.show();
+
+    Serial.printf("set time:%lu\n", millis() - start_time);
+  }
+}
