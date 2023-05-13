@@ -11,7 +11,7 @@ class LedMatrix:
         self.last_pixels = [(1, 1, 1)] * (rows * cols)
         self.socket = self._get_socket()
         self.show()
-    
+
     def _get_socket(self):
         sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         sock.connect((self.ip_address, self.port))
@@ -49,15 +49,13 @@ class LedMatrix:
                 self.socket.sendall(commands.encode())
                 # print(f"Sent commands:\n{commands}")
             except socket.error:
-                print('Refreshing socket connection')
+                print("Refreshing socket connection")
                 self.socket.close()
                 # perform reconnection
                 self.socket = self._get_socket()
 
                 self.socket.sendall(commands.encode())
                 # print(f"Sent commands:\n{commands}")
-
-
 
     def _get_pixel_index(self, i, j):
         if i % 2 == 0:

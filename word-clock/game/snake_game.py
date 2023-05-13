@@ -2,6 +2,7 @@ import random
 
 from matrix import LedMatrix
 
+
 class SnakeGame:
     def __init__(self, matrix: LedMatrix):
         self.matrix = matrix
@@ -15,27 +16,27 @@ class SnakeGame:
             pos = (random.randint(0, 10), random.randint(0, 11))
             if pos not in self.snake:
                 return pos
-            
+
     def game_loop(self):
         while True:
             # TODO replace this line with your method for getting player input
-            key = input("Enter direction (w/a/s/d): ") 
+            key = input("Enter direction (w/a/s/d): ")
 
             game_status = self.update(key)
-            
+
             if game_status is False:  # Game over
                 print("Game Over. Your Score is: ", self.score)
                 break
 
     def update(self, key):
         # Update direction based on key press
-        if key == 'w':
+        if key == "w":
             self.direction = (-1, 0)
-        elif key == 'a':
+        elif key == "a":
             self.direction = (0, -1)
-        elif key == 's':
+        elif key == "s":
             self.direction = (1, 0)
-        elif key == 'd':
+        elif key == "d":
             self.direction = (0, 1)
 
         # Move snake
@@ -43,7 +44,12 @@ class SnakeGame:
         new_head = (head[0] + self.direction[0], head[1] + self.direction[1])
 
         # Check for collisions with the boundary
-        if new_head[0] < 0 or new_head[0] >= len(self.matrix) or new_head[1] < 0 or new_head[1] >= len(self.matrix[0]):
+        if (
+            new_head[0] < 0
+            or new_head[0] >= self.matrix.rows
+            or new_head[1] < 0
+            or new_head[1] >= self.matrix.cols
+        ):
             return True
 
         # Check for collisions with self
@@ -59,16 +65,18 @@ class SnakeGame:
         else:
             # Remove tail if no apple was eaten
             tail = self.snake.pop()
-            self.matrix(tail[0], tail[1], (0, 0, 0))  # black
+            self.matrix.set_pixel(tail[0], tail[1], (0, 0, 0))  # black
 
         # Draw head
-        self.matrix(new_head[0], new_head[1], (0, 0, 255))  # blue
+        self.matrix.set_pixel(new_head[0], new_head[1], (0, 0, 255))  # blue
 
         # Draw body
         for part in self.snake[1:]:
-            self.matrix(part[0], part[1], (0, 255, 0))  # green
+            self.matrix.set_pixel(part[0], part[1], (0, 255, 0))  # green
 
         # Draw apple
-        self.matrix(self.apple[0], self.apple[1], (255, 0, 0))  # red
+        self.matrix.set_pixel(self.apple[0], self.apple[1], (255, 0, 0))  # red
+
+        self.matrix.show()
 
         return True

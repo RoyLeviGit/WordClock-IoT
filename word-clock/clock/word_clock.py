@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from matrix.led_matrix import LedMatrix
+from matrix import LedMatrix
 
 
 class WordClock:
@@ -31,19 +31,17 @@ class WordClock:
         for word in words:
             pixel_indexes = self._get_pixel_index(word)
             for index in pixel_indexes:
-                self.matrix.set_pixel(index[0], index[1], color)  # Assuming "white" is the color to light up
+                self.matrix.set_pixel(index[0], index[1], color)
 
     def _get_pixel_index(self, word):
         for i in range(len(self.grid)):
             start = self.grid[i].find(word)
             if start != -1:
-                return [(i, j) for j in range(start, start+len(word))]
+                return [(i, j) for j in range(start, start + len(word))]
         return []
-
 
     @staticmethod
     def _words_to_light(hour, minute):
-
         # Calculate which words to light up
         words_to_light = []
         if minute < 5:

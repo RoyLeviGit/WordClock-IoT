@@ -2,7 +2,7 @@ from PIL import Image, ImageSequence
 import time
 import threading
 
-from matrix.led_matrix import LedMatrix
+from matrix import LedMatrix
 
 
 class GifPlayer:
@@ -21,7 +21,7 @@ class GifPlayer:
             )  # Resize to self.matrix.rows*self.matrix.cols pixels
             frame_rgb = list(frame.convert("RGB").getdata())
             frames.append(frame_rgb)
-        
+
         return frames
 
     def play_gif(self, gif_path, frame_duration=0.5):

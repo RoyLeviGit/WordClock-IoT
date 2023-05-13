@@ -10,7 +10,9 @@ from matrix import LedMatrix
 matrix = LedMatrix(ip_address="10.0.0.28", rows=11, cols=12)
 
 while True:
-    option = input("Enter option (w: Word Clock, d: Digital Clock, g: Gif, s: Snake Game, r: Clear, q: Quit): ")
+    option = input(
+        "Enter option (w: Word Clock, d: Digital Clock, g: Gif, s: Snake Game, r: Clear, q: Quit): "
+    )
     if option == "w":
         time_to_draw = datetime.now()
         clock = WordClock(matrix)
