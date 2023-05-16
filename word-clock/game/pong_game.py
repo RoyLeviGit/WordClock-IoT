@@ -68,7 +68,7 @@ class PongGame:
                 self.ball_dir[0] = 0
 
         # Check for collisions with the top and bottom of the screen
-        if new_ball[0] == 0 or new_ball[0] == self.matrix.rows:
+        if new_ball[0] == -1 or new_ball[0] == self.matrix.rows:
             self.ball_dir[0] = -self.ball_dir[0]
 
         # Update and draw ball position
