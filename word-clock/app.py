@@ -17,10 +17,11 @@ app.add_middleware(
     allow_methods=["*"],  # Set the allowed HTTP methods here.
     allow_headers=["*"],  # Set the allowed headers here.
 )
-matrix = LedMatrix(ip_address="172.20.10.10", rows=11, cols=12)
 
 @app.get("/word-clock")
-def word_clock(timestamp: datetime):
+def word_clock():
+    matrix = LedMatrix(ip_address="172.20.10.2", rows=11, cols=12)
+
     time_to_draw = datetime.now()
     clock = WordClock(matrix)
     clock.draw_time(time_to_draw)
@@ -29,6 +30,8 @@ def word_clock(timestamp: datetime):
 
 @app.get("/digital-clock")
 def digital_clock():
+    matrix = LedMatrix(ip_address="172.20.10.2", rows=11, cols=12)
+
     time_to_draw = datetime.now()
     clock = DigitalClock(matrix)
     clock.draw_time(time_to_draw)
@@ -37,6 +40,8 @@ def digital_clock():
 
 @app.get("/play-gif")
 def play_gif():
+    matrix = LedMatrix(ip_address="172.20.10.2", rows=11, cols=12)
+
     player = GifPlayer(matrix)
     gif_store = GifStore("word-clock/gif/gifs")
     for gif in gif_store.gif_paths:
@@ -71,12 +76,6 @@ def game_keypress(game_name: str, key: str):
     game.process_keypress(key)
     return {"message": f"Processed keypress: {key} for {game_name}"}
 
-@app.get("/clear-matrix")
-def clear_matrix():
-    matrix.clear()
-    sleep(1)
-    return {"message": "Matrix cleared."}
-
 if __name__ == "__main__":
     import uvicorn
-    uvicorn.run("app:app", host="172.20.10.9", port=8000, reload=True)
+    uvicorn.run("app:app", host="172.20.10.3", port=8000, reload=True)

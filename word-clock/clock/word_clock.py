@@ -28,16 +28,19 @@ class WordClock:
 
         # Set pixels for the words to light up
         color = (255, 255, 255)
+        reverse = False
         for word in words:
-            pixel_indexes = self._get_pixel_index(word)
+            pixel_indexes = self._get_pixel_index(word, reverse)
             for index in pixel_indexes:
                 self.matrix.set_pixel(index[0], index[1], color)
+            if words.count(word) > 1:
+                reverse = True
         
         self.matrix.show()
 
-    def _get_pixel_index(self, word):
+    def _get_pixel_index(self, word, reverse):
         for i in range(len(self.grid)):
-            start = self.grid[i].find(word)
+            start = self.grid[i].rfind(word) if reverse else self.grid[i].find(word)
             if start != -1:
                 return [(i, j) for j in range(start, start + len(word))]
         return []

@@ -7,8 +7,10 @@
 // const char* password = "11235813";
 // const char* ssid = "Roy";
 // const char* password = "12345678";
-const char* ssid = "Michal iPhone";
-const char* password = "Boobie1998";
+// const char* ssid = "Michal iPhone";
+// const char* password = "Boobie1998";
+const char* ssid = "Nadav iPhone";
+const char* password = "01111997";
 // const char* ssid = "TechPublic";
 // const char* password = "";
 

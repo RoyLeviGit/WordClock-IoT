@@ -7,7 +7,7 @@ from gif import GifStore
 from clock import DigitalClock, WordClock
 from matrix import LedMatrix
 
-matrix = LedMatrix(ip_address="172.20.10.10", rows=11, cols=12)
+matrix = LedMatrix(ip_address="172.20.10.2", rows=11, cols=12)
 
 while True:
     option = input(
