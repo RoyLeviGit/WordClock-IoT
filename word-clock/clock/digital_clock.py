@@ -31,7 +31,7 @@ class DigitalClock:
         min_str = time_to_draw.strftime("%M")
 
         x_h, y_h = 0, 2  # Start position for hours (top middle)
-        x_m, y_m = 5, 2  # Start position for minutes (bottom middle)
+        x_m, y_m = 6, 2  # Start position for minutes (bottom middle)
         color = (255, 255, 255)
 
         # Draw hours

@@ -1,15 +1,19 @@
 #include <WiFi.h>
 #include <Adafruit_NeoPixel.h>
 
-const char* ssid = "Vanila";
-const char* password = "0507887875";
+// const char* ssid = "Vanila";
+// const char* password = "0507887875";
 // const char* ssid = "AroinaHome";
 // const char* password = "11235813";
-// const char* ssid = "Roys iPhone";
+// const char* ssid = "Roy";
 // const char* password = "12345678";
+const char* ssid = "Michal iPhone";
+const char* password = "Boobie1998";
+// const char* ssid = "TechPublic";
+// const char* password = "";
 
 #define PIN       5 // NeoPixel data pin
-#define NUMPIXELS 120 // Number of pixels in your matrix (11x12)
+#define NUMPIXELS 132 // Number of pixels in your matrix (11x12)
 
 Adafruit_NeoPixel pixels(NUMPIXELS, PIN, NEO_GRB + NEO_KHZ800);
 

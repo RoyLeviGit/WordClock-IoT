@@ -50,10 +50,12 @@ class SnakeGame:
             or new_head[1] < 0
             or new_head[1] >= self.matrix.cols
         ):
-            return True
+            self.matrix.clear()
+            return False
 
         # Check for collisions with self
         if new_head in self.snake:
+            self.matrix.clear()
             return False
 
         self.snake.insert(0, new_head)

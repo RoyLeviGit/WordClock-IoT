@@ -32,6 +32,8 @@ class WordClock:
             pixel_indexes = self._get_pixel_index(word)
             for index in pixel_indexes:
                 self.matrix.set_pixel(index[0], index[1], color)
+        
+        self.matrix.show()
 
     def _get_pixel_index(self, word):
         for i in range(len(self.grid)):
@@ -43,31 +45,31 @@ class WordClock:
     @staticmethod
     def _words_to_light(hour, minute):
         # Calculate which words to light up
-        words_to_light = []
+        words_to_light = ["IT", "IS"]
         if minute < 5:
-            words_to_light = ["OCLOCK"]
+            words_to_light += ["OCLOCK"]
         elif minute < 10:
-            words_to_light = ["FIVE", "MINUTES", "PAST"]
+            words_to_light += ["FIVE", "MINUTES", "PAST"]
         elif minute < 15:
-            words_to_light = ["TEN", "MINUTES", "PAST"]
+            words_to_light += ["TEN", "MINUTES", "PAST"]
         elif minute < 20:
-            words_to_light = ["FIFTEEN", "PAST"]
+            words_to_light += ["FIFTEEN", "PAST"]
         elif minute < 25:
-            words_to_light = ["TWENTY", "MINUTES", "PAST"]
+            words_to_light += ["TWENTY", "MINUTES", "PAST"]
         elif minute < 30:
-            words_to_light = ["TWENTY", "FIVE", "MINUTES", "PAST"]
+            words_to_light += ["TWENTY", "FIVE", "MINUTES", "PAST"]
         elif minute < 35:
-            words_to_light = ["THIRTY", "MINUTES", "PAST"]
+            words_to_light += ["THIRTY", "MINUTES", "PAST"]
         elif minute < 40:
-            words_to_light = ["TWENTY", "FIVE", "MINUTES", "TO"]
+            words_to_light += ["TWENTY", "FIVE", "MINUTES", "TO"]
         elif minute < 45:
-            words_to_light = ["TWENTY", "MINUTES", "TO"]
+            words_to_light += ["TWENTY", "MINUTES", "TO"]
         elif minute < 50:
-            words_to_light = ["FIFTEEN", "TO"]
+            words_to_light += ["FIFTEEN", "TO"]
         elif minute < 55:
-            words_to_light = ["TEN", "MINUTES", "TO"]
+            words_to_light += ["TEN", "MINUTES", "TO"]
         else:
-            words_to_light = ["FIVE", "MINUTES", "TO"]
+            words_to_light += ["FIVE", "MINUTES", "TO"]
 
         # If it's half past the hour or later, we'll talk about the next hour
         if minute >= 35:

@@ -1,17 +1,17 @@
 from time import sleep
 from datetime import datetime
 
-from game import SnakeGame
+from game import SnakeGame, PongGame
 from gif import GifPlayer
 from gif import GifStore
 from clock import DigitalClock, WordClock
 from matrix import LedMatrix
 
-matrix = LedMatrix(ip_address="10.0.0.28", rows=11, cols=12)
+matrix = LedMatrix(ip_address="172.20.10.10", rows=11, cols=12)
 
 while True:
     option = input(
-        "Enter option (w: Word Clock, d: Digital Clock, g: Gif, s: Snake Game, r: Clear, q: Quit): "
+        "Enter option (w: Word Clock, d: Digital Clock, g: Gif, s: Snake Game, p: Pong Game r: Clear, q: Quit): "
     )
     if option == "w":
         time_to_draw = datetime.now()
@@ -31,6 +31,9 @@ while True:
             player.stop_gif()  # To stop playing gif
     elif option == "s":
         s_game = SnakeGame(matrix)
+        s_game.game_loop()
+    elif option == "p":
+        s_game = PongGame(matrix)
         s_game.game_loop()
     elif option == "r":
         matrix.clear()

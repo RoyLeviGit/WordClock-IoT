@@ -44,6 +44,7 @@ class PongGame:
         if (new_ball[1] == 0 and new_ball[0] not in self.paddle1) or (
             new_ball[1] == self.matrix.cols - 1 and new_ball[0] not in self.paddle2
         ):
+            self.matrix.clear()
             return False
 
         # Check for collisions with the paddles
@@ -71,9 +72,9 @@ class PongGame:
             self.ball_dir[0] = -self.ball_dir[0]
 
         # Update and draw ball position
-        self.set_pixel(self.ball[0], self.ball[1], (0, 0, 0))  # black
+        self.matrix.set_pixel(self.ball[0], self.ball[1], (0, 0, 0))  # black
         self.ball = [self.ball[0] + self.ball_dir[0], self.ball[1] + self.ball_dir[1]]
-        self.set_pixel(self.ball[0], self.ball[1], (255, 0, 0))  # red
+        self.matrix.set_pixel(self.ball[0], self.ball[1], (255, 0, 0))  # red
 
         # Draw paddles
         for i in range(self.matrix.rows):
@@ -85,5 +86,7 @@ class PongGame:
                 self.matrix.set_pixel(i, self.matrix.cols - 1, (255, 255, 255))  # white
             else:
                 self.matrix.set_pixel(i, self.matrix.cols - 1, (0, 0, 0))  # black
+
+        self.matrix.show()
 
         return True
