@@ -1,0 +1,75 @@
+/* For mobile phone */
+@media (max-width: 600px) {
+    .app-menu-container {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        height: 280px;
+    }
+    .app-menu-item {
+        flex: 1;
+        margin-bottom: 20px;
+        width: 100%;
+        text-align: center;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+    .app-menu-icon {
+        font-size: 10vw; /* Adjust the font size to cover up to half the screen width */
+        display: block;
+        margin: 0 auto;
+    }
+    .app-menu-separator {
+        display: none;
+    }
+}
+
+/* For computer */
+@media (min-width: 601px) {
+    .app-menu-container {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        justify-content: center;
+        grid-column-gap: 20px;
+        grid-row-gap: 20px;
+        justify-items: center;
+        align-items: center;
+    }
+    .app-menu-item {
+        display: flex;
+        flex: 1;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+    .app-menu-separator {
+        width: 1px;
+        height: 40px;
+        background-color: #ddd;
+    }
+}
+
+/* Common styles */
+.app-menu-container {
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.app-menu-item {
+    cursor: pointer;
+}
+
+.app-menu-icon {
+    font-size: 3rem; /* Increase the icon size */
+    display: block;
+    margin: 0 auto;
+}
+
+.app-menu-label {
+    margin-top: 10px;
+    text-align: center;
+
+}

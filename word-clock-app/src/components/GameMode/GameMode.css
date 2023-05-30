@@ -1,0 +1,43 @@
+.div-game-mode {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    align-content: center;
+}
+
+.div-up {
+    flex: 1;
+}
+
+.div-left-right {
+    flex: 1;
+    display: flex;
+    flex-direction: row;
+}
+
+
+.div-down {
+    flex: 1;
+}
+
+.div-restart-exit {
+    flex:1;
+    margin: 40px;
+}
+
+.game-button {
+    margin: 5px;
+}
+
+.game-button-hor {
+    margin: 100px;
+}
+
+.div-left {
+    margin: 40px;
+}
+
+.div-right {
+    margin: 40px;
+}
