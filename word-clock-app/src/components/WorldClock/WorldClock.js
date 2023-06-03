@@ -21,7 +21,7 @@ const WorldClock = () => {
 
  
   const handleCountryChange = async () => {
-    const response = await fetch('/api/change-country', {
+    const response = await fetch('/change-country', {
       method: 'POST',
       body: JSON.stringify({ country: selectedCountry }),
     });

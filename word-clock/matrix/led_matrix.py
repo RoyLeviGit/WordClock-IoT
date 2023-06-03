@@ -2,17 +2,20 @@ import socket
 
 
 class LedMatrix:
-    def __init__(self, ip_address, port=80, rows=11, cols=12):
+    def __init__(self, ip_address, port=80, rows=11, cols=12, debug_no_socket=False):
         self.ip_address = ip_address
         self.port = port
         self.rows = rows
         self.cols = cols
         self.pixels = [(0, 0, 0)] * (rows * cols)
         self.last_pixels = [(1, 1, 1)] * (rows * cols)
+        self.debug_no_socket = debug_no_socket
         self.socket = self._get_socket()
         self.show()
 
     def _get_socket(self):
+        if self.debug_no_socket:
+            return None
         sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         sock.connect((self.ip_address, self.port))
         return sock
@@ -32,6 +35,7 @@ class LedMatrix:
 
     def show(self):
         # Generate commands to set the color of each pixel
+        print("Will show led matrix")
         commands = ""
         for i in range(self.rows):
             for j in range(self.cols):
@@ -43,6 +47,9 @@ class LedMatrix:
                     self.last_pixels[pixel_index] = self.pixels[pixel_index]
         if commands:
             commands += "S\n"
+            # print(f"Sending:\n{commands}")
+            if self.debug_no_socket:
+                return
 
             try:
                 # Send the commands over the network socket

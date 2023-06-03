@@ -24,7 +24,7 @@ const ColorPalette = () => {
     // Perform your fetch request to send the color to the backend here
     // Example code:
     console.log(color);
-    fetch('/api/send-color', {
+    fetch('/send-color', {
       method: 'POST',
       body: JSON.stringify({ color }),
       headers: {

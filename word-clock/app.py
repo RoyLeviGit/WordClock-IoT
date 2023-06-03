@@ -1,4 +1,4 @@
-from time import sleep
+import asyncio
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from datetime import datetime
@@ -18,30 +18,51 @@ app.add_middleware(
     allow_headers=["*"],  # Set the allowed headers here.
 )
 
-@app.get("/word-clock")
-def word_clock():
-    matrix = LedMatrix(ip_address="172.20.10.2", rows=11, cols=12)
+matrix = LedMatrix(ip_address="172.20.10.2", rows=11, cols=12, debug_no_socket=True)
 
-    time_to_draw = datetime.now()
-    clock = WordClock(matrix)
-    clock.draw_time(time_to_draw)
-    sleep(1)
-    return {"message": "Word clock drawn."}
+# Global variable to hold the current task.
+current_task = None
+
+def cancel_current_task():
+    global current_task
+    if current_task:
+        current_task.cancel()
+        current_task = None
+
+
+@app.get("/word-clock")
+async def word_clock():
+    global current_task
+    cancel_current_task()
+
+    async def draw_clock_periodically():
+        while True:
+            time_to_draw = datetime.now()
+            clock = WordClock(matrix)
+            clock.draw_time(time_to_draw)
+            await asyncio.sleep(60)  # Wait for 1 minute
+
+    current_task = asyncio.ensure_future(draw_clock_periodically())
+    return {"message": "Word clock started."}
+
 
 @app.get("/digital-clock")
-def digital_clock():
-    matrix = LedMatrix(ip_address="172.20.10.2", rows=11, cols=12)
+async def digital_clock():
+    global current_task
+    cancel_current_task()
 
-    time_to_draw = datetime.now()
-    clock = DigitalClock(matrix)
-    clock.draw_time(time_to_draw)
-    sleep(2)
-    return {"message": "Digital clock drawn."}
+    async def draw_clock_periodically():
+        while True:
+            time_to_draw = datetime.now()
+            clock = DigitalClock(matrix)
+            clock.draw_time(time_to_draw)
+            await asyncio.sleep(60)  # Wait for 1 minute
+
+    current_task = asyncio.ensure_future(draw_clock_periodically())
+    return {"message": "Digital clock started."}
 
 @app.get("/play-gif")
 def play_gif():
-    matrix = LedMatrix(ip_address="172.20.10.2", rows=11, cols=12)
-
     player = GifPlayer(matrix)
     gif_store = GifStore("word-clock/gif/gifs")
     for gif in gif_store.gif_paths:
@@ -78,4 +99,4 @@ def game_keypress(game_name: str, key: str):
 
 if __name__ == "__main__":
     import uvicorn
-    uvicorn.run("app:app", host="172.20.10.3", port=8000, reload=True)
+    uvicorn.run("app:app", host="0.0.0.0", port=8000, reload=True)

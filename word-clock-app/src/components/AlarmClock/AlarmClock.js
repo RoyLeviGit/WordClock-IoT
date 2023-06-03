@@ -18,7 +18,7 @@ function DateTimePicker() {
     const hourToSend = selectedHour;
   
     // Send the selected hour to the backend
-    fetch('/api/set_hour', {
+    fetch('/set_hour', {
       method: 'POST',
       body: JSON.stringify({ hour: hourToSend }),
       headers: {

@@ -24,7 +24,7 @@ const AppMenu = () => {
     const [featureComponent, setFeatureComponent] = useState('');
 
     function fetchDigitalClock() {
-        fetch('http://172.20.10.3:8000/digital-clock')
+        fetch('/digital-clock')
           .then(response => response.json())
           .then(data => {
             // Handle the response data
@@ -38,7 +38,7 @@ const AppMenu = () => {
       }
       
     function fetchWordClock() {
-    fetch('http://172.20.10.3:8000/word-clock')
+    fetch('/word-clock')
         .then(response => response.json())
         .then(data => {
         // Handle the response data

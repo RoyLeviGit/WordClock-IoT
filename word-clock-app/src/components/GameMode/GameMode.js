@@ -19,7 +19,7 @@ const GameMode = () => {
 
     const handleButtonClick = async (buttonName) => {
       console.log(buttonName);
-      const response = await fetch('/api/game-mode', {
+      const response = await fetch('/game-mode', {
         method: 'POST',
         body: JSON.stringify({ key: buttonName }),
       });

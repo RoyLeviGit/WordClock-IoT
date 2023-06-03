@@ -22,7 +22,7 @@ const GifChooser = () => {
   };
 
   const handleSendGifUrl = () => {
-    fetch('https://your-fastapi-backend.com/gif', {
+    fetch('/gif', {
       method: 'POST',
       body: JSON.stringify({ gifUrl }),
       headers: {
@@ -47,7 +47,8 @@ const GifChooser = () => {
       </div>
       {tabIndex === 0 && (
         <Box sx={{ display: 'flex', flexWrap: 'wrap', margin: 2, height: 100, justifyContent: 'flex-end', alignItems: 'center' }}>
-          <input type="file" onChange={event => setGifUrl(URL.createObjectURL(event.target.files[0]))} />
+          {/* Sending a URL like this won't work when not on the same device */}
+          <input type="file" onChange={event => setGifUrl(URL.createObjectURL(event.target.files[0]))} /> 
         </Box>
       )}
       {tabIndex === 1 && (
