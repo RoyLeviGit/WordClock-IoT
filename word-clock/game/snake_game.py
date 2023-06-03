@@ -1,3 +1,4 @@
+import asyncio
 import random
 
 from matrix import LedMatrix
@@ -16,19 +17,8 @@ class SnakeGame:
             pos = (random.randint(0, 10), random.randint(0, 11))
             if pos not in self.snake:
                 return pos
-
-    def game_loop(self):
-        while True:
-            # TODO replace this line with your method for getting player input
-            key = input("Enter direction (w/a/s/d): ")
-
-            game_status = self.update(key)
-
-            if game_status is False:  # Game over
-                print("Game Over. Your Score is: ", self.score)
-                break
-
-    def update(self, key):
+            
+    def handle_key(self, key):
         # Update direction based on key press
         if key == "w":
             self.direction = (-1, 0)
@@ -39,6 +29,17 @@ class SnakeGame:
         elif key == "d":
             self.direction = (0, 1)
 
+    def game_loop(self):
+        while True:
+            game_status = self.update()
+
+            if game_status is False:  # Game over
+                print("Game Over. Your Score is: ", self.score)
+                break
+
+            asyncio.sleep(0.4)
+
+    def update(self):
         # Move snake
         head = self.snake[0]
         new_head = (head[0] + self.direction[0], head[1] + self.direction[1])

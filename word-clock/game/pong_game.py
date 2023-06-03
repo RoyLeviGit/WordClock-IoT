@@ -1,3 +1,4 @@
+import asyncio
 import random
 
 from matrix import LedMatrix
@@ -12,24 +13,24 @@ class PongGame:
         self.ball_dir = [0, 1]  # Direction of the ball
         self.score = 0
 
-    def game_loop(self):
-        while True:
-            # TODO replace this line with your method for getting player input
-            key = input("Enter direction (w/s): ")
-
-            game_status = self.update(key)
-
-            if game_status is False:  # Game over
-                print("Game Over. Your Score is: ", self.score)
-                break
-
-    def update(self, key):
+    def handle_key(self, key):
         # Move player paddle
         if key == "w" and 0 not in self.paddle1:
             self.paddle1 = [p - 1 for p in self.paddle1]
         elif key == "s" and self.matrix.rows - 1 not in self.paddle1:
             self.paddle1 = [p + 1 for p in self.paddle1]
 
+    def game_loop(self):
+        while True:
+            game_status = self.update()
+
+            if game_status is False:  # Game over
+                print("Game Over. Your Score is: ", self.score)
+                break
+
+            asyncio.sleep(0.3)
+
+    def update(self):
         # Move opponent paddle randomly
         move = random.choice([-1, 1])
         if move == -1 and 0 not in self.paddle2:

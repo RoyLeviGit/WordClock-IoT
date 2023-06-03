@@ -140,15 +140,30 @@ async def send_gif(gif: UploadFile = File(...)):
 
 @app.get("/snake-game")
 def snake_game():
-    s_game = SnakeGame(matrix)
-    s_game.game_loop()
-    sleep(1)
+    global current_task
+    cancel_current_task()
+
+    async def game_task():
+        global current_game
+        current_game = SnakeGame(matrix)
+        current_game.game_loop()
+
+    current_task = asyncio.ensure_future(game_task())
+
     return {"message": "Snake game started."}
 
 @app.get("/pong-game")
 def pong_game():
-    s_game = PongGame(matrix)
-    s_game.game_loop()
+    global current_task
+    cancel_current_task()
+
+    async def game_task():
+        global current_game
+        current_game = PongGame(matrix)
+        current_game.game_loop()
+
+    current_task = asyncio.ensure_future(game_task())
+
     return {"message": "Pong game started."}
 
 @app.get("/game/{game_name}/keypress/{key}")
