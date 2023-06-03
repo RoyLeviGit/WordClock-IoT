@@ -7,6 +7,8 @@ import httpx
 from pydantic import BaseModel
 from fastapi.middleware.cors import CORSMiddleware
 from datetime import datetime
+import pytz
+import pycountry
 
 from game import SnakeGame, PongGame
 from gif import GifPlayer
@@ -28,6 +30,8 @@ matrix = LedMatrix(ip_address="172.20.10.2", rows=11, cols=12, debug_no_socket=T
 # Global variables.
 current_task = None
 current_clock = None
+last_clock = None
+current_timezone = None
 current_game = None
 last_game = None
 gif_player = GifPlayer(matrix)
@@ -42,15 +46,23 @@ def cancel_current_task():
         current_game.stop_game()
         current_game = None
 
+def get_current_time():
+    global current_timezone
+    if not current_timezone:
+        return datetime.now()
+    return datetime.now(current_timezone)
+    
 @app.get("/word-clock")
 async def word_clock():
-    global current_task
+    global current_task, last_clock
     cancel_current_task()
+
+    last_clock = "word"
 
     async def draw_clock_periodically():
         global current_clock
         while True:
-            time_to_draw = datetime.now()
+            time_to_draw = get_current_time()
             current_clock = WordClock(matrix)
             current_clock.draw_time(time_to_draw)
             await asyncio.sleep(60)  # Wait for 1 minute
@@ -61,13 +73,15 @@ async def word_clock():
 
 @app.get("/digital-clock")
 async def digital_clock():
-    global current_task
+    global current_task, last_clock
     cancel_current_task()
+
+    last_clock = "digital"
 
     async def draw_clock_periodically():
         global current_clock
         while True:
-            time_to_draw = datetime.now()
+            time_to_draw = get_current_time()
             current_clock = DigitalClock(matrix)
             current_clock.draw_time(time_to_draw)
             await asyncio.sleep(60)  # Wait for 1 minute
@@ -98,6 +112,33 @@ async def send_color(color_data: Color):
             raise HTTPException(status_code=400, detail=str(e))
     else:
         raise HTTPException(status_code=400, detail="No clock is currently running.")
+    
+class CountryRequest(BaseModel):
+    country: str
+
+@app.post("/change-country")
+async def change_country(country_request: CountryRequest):
+    global current_timezone
+    
+    selected_country = country_request.country
+    print(f"Selected country: {selected_country}")
+
+    try:
+        country_code = pycountry.countries.search_fuzzy(selected_country)[0].alpha_2
+        timezone = pytz.country_timezones[country_code][0]
+        current_timezone = pytz.timezone(timezone)
+    except KeyError:
+        raise ValueError("Invalid country name.")
+
+    global last_clock
+    if not last_clock:
+        return {"message": "No clock is currently running."}
+    
+    if last_clock == "word":
+        await word_clock()
+    elif last_clock == "digital":
+        await digital_clock()
+    return {"message": "Country changed successfully."}
 
 class GifUrl(BaseModel):
     gifUrl: str

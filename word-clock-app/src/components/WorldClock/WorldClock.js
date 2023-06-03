@@ -24,6 +24,9 @@ const WorldClock = () => {
     const response = await fetch('/change-country', {
       method: 'POST',
       body: JSON.stringify({ country: selectedCountry }),
+      headers: {
+        'Content-Type': 'application/json',
+      },
     });
     const data = await response.json();
     console.log(data);
