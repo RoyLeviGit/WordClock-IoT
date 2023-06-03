@@ -31,6 +31,9 @@ class LedMatrix:
     def clear(self):
         self.pixels = [(0, 0, 0)] * (self.rows * self.cols)
         self.last_pixels = [(1, 1, 1)] * (self.rows * self.cols)
+
+    def reset(self):
+        self.clear()
         self.show()
 
     def show(self):

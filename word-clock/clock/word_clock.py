@@ -20,6 +20,7 @@ class WordClock:
             "TENSEZOCLOCK",
         ]
         self.matrix = matrix
+        self.color = (255, 255, 255)
 
     def draw_time(self, time_to_draw: datetime):
         hour = time_to_draw.hour
@@ -27,12 +28,11 @@ class WordClock:
         words = self._words_to_light(hour, minute)
 
         # Set pixels for the words to light up
-        color = (255, 255, 255)
         reverse = False
         for word in words:
             pixel_indexes = self._get_pixel_index(word, reverse)
             for index in pixel_indexes:
-                self.matrix.set_pixel(index[0], index[1], color)
+                self.matrix.set_pixel(index[0], index[1], self.color)
             if words.count(word) > 1:
                 reverse = True
         

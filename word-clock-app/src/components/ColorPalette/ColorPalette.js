@@ -22,7 +22,6 @@ const ColorPalette = () => {
 
   const handleSendColor = () => {
     // Perform your fetch request to send the color to the backend here
-    // Example code:
     console.log(color);
     fetch('/send-color', {
       method: 'POST',

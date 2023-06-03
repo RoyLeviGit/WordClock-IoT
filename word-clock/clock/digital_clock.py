@@ -19,6 +19,7 @@ class DigitalClock:
 
     def __init__(self, matrix: LedMatrix):
         self.matrix = matrix
+        self.color = (255, 255, 255)
 
     def draw_char(self, char, x, y, color):
         for i, line in enumerate(self.NUMBERS[char]):
@@ -32,16 +33,15 @@ class DigitalClock:
 
         x_h, y_h = 0, 2  # Start position for hours (top middle)
         x_m, y_m = 6, 2  # Start position for minutes (bottom middle)
-        color = (255, 255, 255)
 
         # Draw hours
         for char in hour_str:
-            self.draw_char(char, x_h, y_h, color)
+            self.draw_char(char, x_h, y_h, self.color)
             y_h += 5  # Move to the right. We add 4 because the width of each character is 3, and we leave 1 column for spacing
 
         # Draw minutes
         for char in min_str:
-            self.draw_char(char, x_m, y_m, color)
+            self.draw_char(char, x_m, y_m, self.color)
             y_m += 5  # Move to the right. We add 4 because the width of each character is 3, and we leave 1 column for spacing
 
         self.matrix.show()

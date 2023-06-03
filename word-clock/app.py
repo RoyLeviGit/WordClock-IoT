@@ -1,5 +1,6 @@
 import asyncio
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException
+from pydantic import BaseModel
 from fastapi.middleware.cors import CORSMiddleware
 from datetime import datetime
 
@@ -20,8 +21,9 @@ app.add_middleware(
 
 matrix = LedMatrix(ip_address="172.20.10.2", rows=11, cols=12, debug_no_socket=True)
 
-# Global variable to hold the current task.
+# Global variables.
 current_task = None
+current_clock = None
 
 def cancel_current_task():
     global current_task
@@ -36,10 +38,11 @@ async def word_clock():
     cancel_current_task()
 
     async def draw_clock_periodically():
+        global current_clock
         while True:
             time_to_draw = datetime.now()
-            clock = WordClock(matrix)
-            clock.draw_time(time_to_draw)
+            current_clock = WordClock(matrix)
+            current_clock.draw_time(time_to_draw)
             await asyncio.sleep(60)  # Wait for 1 minute
 
     current_task = asyncio.ensure_future(draw_clock_periodically())
@@ -52,14 +55,39 @@ async def digital_clock():
     cancel_current_task()
 
     async def draw_clock_periodically():
+        global current_clock
         while True:
             time_to_draw = datetime.now()
-            clock = DigitalClock(matrix)
-            clock.draw_time(time_to_draw)
+            current_clock = DigitalClock(matrix)
+            current_clock.draw_time(time_to_draw)
             await asyncio.sleep(60)  # Wait for 1 minute
 
     current_task = asyncio.ensure_future(draw_clock_periodically())
     return {"message": "Digital clock started."}
+
+class Color(BaseModel):
+    color: str
+
+    def to_rgb(self):
+        return (
+            int(self.color[1:3], 16),
+            int(self.color[3:5], 16),
+            int(self.color[5:7], 16),
+        )
+
+@app.post("/send-color")
+async def send_color(color_data: Color):
+    global current_clock
+    if current_clock:
+        try:
+            # change_color method is assumed to be async
+            current_clock.color = color_data.to_rgb()
+            current_clock.draw_time(datetime.now())
+            return {"message": "Color changed successfully."}
+        except Exception as e:
+            raise HTTPException(status_code=400, detail=str(e))
+    else:
+        raise HTTPException(status_code=400, detail="No clock is currently running.")
 
 @app.get("/play-gif")
 def play_gif():

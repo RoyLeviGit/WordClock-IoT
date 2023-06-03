@@ -11,7 +11,7 @@ matrix = LedMatrix(ip_address="172.20.10.2", rows=11, cols=12)
 
 while True:
     option = input(
-        "Enter option (w: Word Clock, d: Digital Clock, g: Gif, s: Snake Game, p: Pong Game r: Clear, q: Quit): "
+        "Enter option (w: Word Clock, d: Digital Clock, g: Gif, s: Snake Game, p: Pong Game r: Reset, q: Quit): "
     )
     if option == "w":
         time_to_draw = datetime.now()
@@ -36,6 +36,6 @@ while True:
         s_game = PongGame(matrix)
         s_game.game_loop()
     elif option == "r":
-        matrix.clear()
+        matrix.reset()
     elif option == "q":
         break
