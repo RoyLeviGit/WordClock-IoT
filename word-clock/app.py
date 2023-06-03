@@ -1,5 +1,9 @@
 import asyncio
-from fastapi import FastAPI, HTTPException
+import os
+import shutil
+from typing import Union
+from fastapi import FastAPI, File, HTTPException, UploadFile
+import httpx
 from pydantic import BaseModel
 from fastapi.middleware.cors import CORSMiddleware
 from datetime import datetime
@@ -24,12 +28,14 @@ matrix = LedMatrix(ip_address="172.20.10.2", rows=11, cols=12, debug_no_socket=T
 # Global variables.
 current_task = None
 current_clock = None
+gif_player = GifPlayer(matrix)
 
 def cancel_current_task():
-    global current_task
+    global current_task, gif_player
     if current_task:
         current_task.cancel()
         current_task = None
+    gif_player.stop_gif()
 
 
 @app.get("/word-clock")
@@ -89,16 +95,48 @@ async def send_color(color_data: Color):
     else:
         raise HTTPException(status_code=400, detail="No clock is currently running.")
 
-@app.get("/play-gif")
-def play_gif():
-    player = GifPlayer(matrix)
-    gif_store = GifStore("word-clock/gif/gifs")
-    for gif in gif_store.gif_paths:
-        player.play_gif(gif)
-        sleep(3)
-        player.stop_gif()  # To stop playing gif
-    sleep(1)
-    return {"message": "Gifs played."}
+class GifUrl(BaseModel):
+    gifUrl: str
+
+    async def download_file(self, filename):
+        async with httpx.AsyncClient() as client:
+            response = await client.get(self.gifUrl)
+            response.raise_for_status()
+            with open(filename, 'wb') as f:
+                f.write(response.content)
+
+@app.post("/gif_url")
+async def send_gif_url(gif_data: GifUrl):
+    global gif_player
+    cancel_current_task()
+
+    downloaded_gifs_directory = "downloaded_gifs"
+    if not os.path.exists(downloaded_gifs_directory):
+        os.makedirs(downloaded_gifs_directory)
+    filename = os.path.join(downloaded_gifs_directory, os.path.basename(gif_data.gifUrl))
+
+    await gif_data.download_file(filename)
+    gif_player.play_gif(filename)
+
+    return {"message": "Gif played."}
+
+@app.post("/gif")
+async def send_gif(gif: UploadFile = File(...)):
+    global gif_player
+    cancel_current_task()
+
+    downloaded_gifs_directory = "downloaded_gifs"
+    if not os.path.exists(downloaded_gifs_directory):
+        os.makedirs(downloaded_gifs_directory)
+    filename = os.path.join(downloaded_gifs_directory, gif.filename)
+
+    # save the file
+    with open(filename, "wb") as buffer:
+        shutil.copyfileobj(gif.file, buffer)
+
+    gif_player.play_gif(filename)
+
+    return {"message": "Gif played."}
 
 @app.get("/snake-game")
 def snake_game():

@@ -46,3 +46,4 @@ class GifPlayer:
         self.is_playing = False
         if self.thread is not None:
             self.thread.join()
+            self.thread = None

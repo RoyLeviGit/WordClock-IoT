@@ -22,16 +22,38 @@ const GifChooser = () => {
   };
 
   const handleSendGifUrl = () => {
-    fetch('/gif', {
-      method: 'POST',
-      body: JSON.stringify({ gifUrl }),
-      headers: {
-        'Content-Type': 'application/json'
-      }
-    })
-      .then(response => response.json())
-      .then(data => console.log(data))
-      .catch(error => console.error(error));
+    console.log('Sending GIF URL:', gifUrl);
+
+    if (gifUrl.startsWith('blob')) {
+      fetch(gifUrl)
+      .then(res => res.blob())  // convert the data to a blob
+      .then(blob => {
+        const formData = new FormData();
+    
+        // 'gif' is the name of the field to be used in the server side script
+        formData.append('gif', blob, 'filename.gif');
+    
+        fetch('/gif', {
+          method: 'POST',
+          body: formData,
+        })
+        .then(response => response.json())
+        .then(data => console.log(data))
+        .catch(error => console.error(error));
+      });
+    } else {
+        // Send the URL to the server
+        fetch('/gif_url', {
+          method: 'POST',
+          body: JSON.stringify({ gifUrl: gifUrl }),
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        })
+        .then(response => response.json())
+        .then(data => console.log(data))
+        .catch(error => console.error(error));      
+    }
   };
 
   return (
@@ -47,7 +69,6 @@ const GifChooser = () => {
       </div>
       {tabIndex === 0 && (
         <Box sx={{ display: 'flex', flexWrap: 'wrap', margin: 2, height: 100, justifyContent: 'flex-end', alignItems: 'center' }}>
-          {/* Sending a URL like this won't work when not on the same device */}
           <input type="file" onChange={event => setGifUrl(URL.createObjectURL(event.target.files[0]))} /> 
         </Box>
       )}
@@ -63,7 +84,7 @@ const GifChooser = () => {
           />
         </Box>
       )}
-            {tabIndex === 2 && (
+      {tabIndex === 2 && (
         <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center',  margin: 2 }}>
           <Box
             sx={{ width: '80%', height: 100, border: '2px dashed grey' }}
@@ -75,7 +96,7 @@ const GifChooser = () => {
         </Box>
       )}
       
-        <Button onClick={handleSendGifUrl} variant="contained" sx={{ marginTop: 2, backgroundColor: '#47585F'}}>Send GIF</Button>
+      <Button onClick={handleSendGifUrl} variant="contained" sx={{ marginTop: 2, backgroundColor: '#47585F'}}>Send GIF</Button>
     </div>
   );
 };
