@@ -1,5 +1,6 @@
-import asyncio
 import random
+import threading
+from time import sleep
 
 from matrix import LedMatrix
 
@@ -11,6 +12,8 @@ class SnakeGame:
         self.direction = (0, 1)  # Start moving to the right
         self.apple = self._new_apple()
         self.score = 0
+        self.is_playing = False
+        self.thread = None
 
     def _new_apple(self):
         while True:
@@ -20,24 +23,40 @@ class SnakeGame:
             
     def handle_key(self, key):
         # Update direction based on key press
-        if key == "w":
+        if key == "up":
             self.direction = (-1, 0)
-        elif key == "a":
+        elif key == "left":
             self.direction = (0, -1)
-        elif key == "s":
+        elif key == "down":
             self.direction = (1, 0)
-        elif key == "d":
+        elif key == "right":
             self.direction = (0, 1)
+        print(f"Direction: {self.direction}")
 
     def game_loop(self):
-        while True:
-            game_status = self.update()
+        self.is_playing = True
 
-            if game_status is False:  # Game over
-                print("Game Over. Your Score is: ", self.score)
-                break
+        def loop_game():
+            while True:
+                if not self.is_playing:
+                    break
+                
+                game_status = self.update()
 
-            asyncio.sleep(0.4)
+                if game_status is False:  # Game over
+                    print("Game Over. Your Score is: ", self.score)
+                    break
+
+                sleep(0.4)
+        
+        self.thread = threading.Thread(target=loop_game)
+        self.thread.start()
+
+    def stop_game(self):
+        self.is_playing = False
+        if self.thread is not None:
+            self.thread.join()
+            self.thread = None
 
     def update(self):
         # Move snake

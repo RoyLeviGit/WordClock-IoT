@@ -29,7 +29,6 @@ const AppMenu = () => {
           .then(data => {
             // Handle the response data
             console.log(data);
-            // Call other functions or update the UI with the data
           })
           .catch(error => {
             // Handle any errors
@@ -43,13 +42,25 @@ const AppMenu = () => {
         .then(data => {
         // Handle the response data
         console.log(data);
-        // Call other functions or update the UI with the data
         })
         .catch(error => {
         // Handle any errors
         console.error(error);
         });
     }
+    function fetchGame(game) {
+        fetch(`/${game}`)
+            .then(response => response.json())
+            .then(data => {
+            // Handle the response data
+            console.log(data);
+            })
+            .catch(error => {
+            // Handle any errors
+            console.error(error);
+            });
+    };
+    
     const componentLoader = () => {   
         if(featureComponent === 'World Clock') {
             return (
@@ -79,6 +90,7 @@ const AppMenu = () => {
                )
         }
         else if(featureComponent === 'Pong' || featureComponent === 'Snake') {
+            fetchGame(featureComponent === 'Pong'? "pong-game" : "snake-game");
             return (
                 <GameMode/>
             )

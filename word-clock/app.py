@@ -28,15 +28,19 @@ matrix = LedMatrix(ip_address="172.20.10.2", rows=11, cols=12, debug_no_socket=T
 # Global variables.
 current_task = None
 current_clock = None
+current_game = None
+last_game = None
 gif_player = GifPlayer(matrix)
 
 def cancel_current_task():
-    global current_task, gif_player
+    global current_task, gif_player, current_game
     if current_task:
         current_task.cancel()
         current_task = None
     gif_player.stop_gif()
-
+    if current_game:
+        current_game.stop_game()
+        current_game = None
 
 @app.get("/word-clock")
 async def word_clock():
@@ -139,9 +143,11 @@ async def send_gif(gif: UploadFile = File(...)):
     return {"message": "Gif played."}
 
 @app.get("/snake-game")
-def snake_game():
-    global current_task
+async def snake_game():
+    global current_task, last_game
     cancel_current_task()
+
+    last_game = "snake"
 
     async def game_task():
         global current_game
@@ -153,9 +159,11 @@ def snake_game():
     return {"message": "Snake game started."}
 
 @app.get("/pong-game")
-def pong_game():
-    global current_task
+async def pong_game():
+    global current_task, last_game
     cancel_current_task()
+
+    last_game = "pong"
 
     async def game_task():
         global current_game
@@ -166,17 +174,28 @@ def pong_game():
 
     return {"message": "Pong game started."}
 
-@app.get("/game/{game_name}/keypress/{key}")
-def game_keypress(game_name: str, key: str):
-    if game_name == "snake":
-        game = SnakeGame(matrix)
-    elif game_name == "pong":
-        game = PongGame(matrix)
-    else:
-        return {"message": f"No game found with name: {game_name}"}
+@app.get("/game/{key}")
+async def game_keypress(key: str):
+    if not current_game:
+        return {"message": "No game is currently running."}
 
-    game.process_keypress(key)
-    return {"message": f"Processed keypress: {key} for {game_name}"}
+    if key == "restart":
+        global last_game
+        if not last_game:
+            return {"message": "No game is currently running."}
+        
+        if last_game == "snake":
+            await snake_game()
+        elif last_game ==  "pong":
+            await pong_game()
+        return {"message": "Game restarted."}
+    
+    if key == "exit":
+        cancel_current_task()
+        return {"message": "Game stopped."}
+
+    current_game.handle_key(key)
+    return {"message": f"Processed keypress: {key} for {current_game}"}
 
 if __name__ == "__main__":
     import uvicorn

@@ -1,5 +1,6 @@
-import asyncio
 import random
+import threading
+from time import sleep
 
 from matrix import LedMatrix
 
@@ -12,23 +13,41 @@ class PongGame:
         self.ball = [5, 5]  # Position of the ball
         self.ball_dir = [0, 1]  # Direction of the ball
         self.score = 0
+        self.is_playing = False
+        self.thread = None
+
 
     def handle_key(self, key):
         # Move player paddle
-        if key == "w" and 0 not in self.paddle1:
+        if key == "up" and 0 not in self.paddle1:
             self.paddle1 = [p - 1 for p in self.paddle1]
-        elif key == "s" and self.matrix.rows - 1 not in self.paddle1:
+        elif key == "down" and self.matrix.rows - 1 not in self.paddle1:
             self.paddle1 = [p + 1 for p in self.paddle1]
 
     def game_loop(self):
-        while True:
-            game_status = self.update()
+        self.is_playing = True
 
-            if game_status is False:  # Game over
-                print("Game Over. Your Score is: ", self.score)
-                break
+        def loop_game():
+            while True:
+                if not self.is_playing:
+                    break
 
-            asyncio.sleep(0.3)
+                game_status = self.update()
+
+                if game_status is False:  # Game over
+                    print("Game Over. Your Score is: ", self.score)
+                    break
+
+                sleep(0.3)
+        
+        self.thread = threading.Thread(target=loop_game)
+        self.thread.start()
+
+    def stop_game(self):
+        self.is_playing = False
+        if self.thread is not None:
+            self.thread.join()
+            self.thread = None
 
     def update(self):
         # Move opponent paddle randomly
