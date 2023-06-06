@@ -2,20 +2,15 @@ import React from 'react';
 import { useState } from 'react';
 import { Grid, IconButton, Typography } from '@mui/material';
 import AbcIcon from '@mui/icons-material/Abc';
-// import Looks6Icon from '@mui/icons-material/Looks6';
-import AccessAlarmIcon from '@mui/icons-material/AccessAlarm';
-import SportsEsportsIcon from '@mui/icons-material/SportsEsports';
 import SportsCricketIcon from '@mui/icons-material/SportsCricket';
 import AddReactionIcon from '@mui/icons-material/AddReaction';
-import PublicIcon from '@mui/icons-material/Public';
 import ShowChartIcon from '@mui/icons-material/ShowChart';
 import Looks6Icon from '@mui/icons-material/Looks6';
-// import TimerIcon from '@mui/icons-material/Timer';
-// import AvTimerIcon from '@mui/icons-material/AvTimer';
+
 
 import WorldClock from '../WorldClock/WorldClock';
-import AlarmClock from '../AlarmClock/AlarmClock';
 import GameMode from '../GameMode/GameMode';
+import GameModePong from '../GameModePong/GameModePong';
 import GifLamp from '../GifLamp/GifLamp';
 import ColorPalette from '../ColorPalette/ColorPalette';
 import "./AppMenu.css";
@@ -37,17 +32,17 @@ const AppMenu = () => {
       }
       
     function fetchWordClock() {
-    fetch('/word-clock')
-        .then(response => response.json())
-        .then(data => {
-        // Handle the response data
-        console.log(data);
-        })
-        .catch(error => {
-        // Handle any errors
-        console.error(error);
-        });
-    }
+        fetch('/word-clock')
+            .then(response => response.json())
+            .then(data => {
+            // Handle the response data
+            console.log(data);
+            })
+            .catch(error => {
+            // Handle any errors
+            console.error(error);
+            });
+        }
     function fetchGame(game) {
         fetch(`/${game}`)
             .then(response => response.json())
@@ -61,13 +56,11 @@ const AppMenu = () => {
             });
     };
     
+    const updateFeatureComponent = (component) => {
+        setFeatureComponent(component);
+  };
     const componentLoader = () => {   
-        if(featureComponent === 'World Clock') {
-            return (
-                <WorldClock/>
-            );
-        }
-        else if(featureComponent === 'Word Clock') {
+        if(featureComponent === 'Word Clock') {
            fetchWordClock();
            return (
             <div style={{display: 'flex', alignItems: 'center', flexDirection: 'column'}}>
@@ -75,6 +68,7 @@ const AppMenu = () => {
                     Word Clock
                 </h2>
                 <ColorPalette/>
+                <WorldClock/>
             </div>
            )
         }
@@ -86,14 +80,21 @@ const AppMenu = () => {
                     Digital Clock
                 </h2>
                 <ColorPalette/>
+                <WorldClock/>
             </div>
                )
         }
-        else if(featureComponent === 'Pong' || featureComponent === 'Snake') {
+        else if(featureComponent === 'Pong') {
             fetchGame(featureComponent === 'Pong'? "pong-game" : "snake-game");
             return (
-                <GameMode/>
+                <GameModePong updateFeatureComponent={updateFeatureComponent} fetchWordClock={fetchWordClock}/>
             )
+        }
+        else if(featureComponent === 'Snake') {
+            fetchGame(featureComponent === 'Pong'? "pong-game" : "snake-game");
+            return (
+                <GameMode updateFeatureComponent={updateFeatureComponent} fetchWordClock={fetchWordClock} />
+                )
         }
         else if(featureComponent === 'Gif Lamp') {
             return (
@@ -121,14 +122,6 @@ const AppMenu = () => {
                 <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>    
                     <Looks6Icon className="app-menu-icon" style={{ fontSize: 50 }} />
                     <span className="app-menu-label" style={{ fontSize: 14 }}>Digital Clock</span>
-                </div>
-            </IconButton>
-          </Grid>
-          <Grid item xs={4} className="app-menu-item">
-            <IconButton aria-label="World Clock" onClick={() => setFeatureComponent('World Clock')}>
-                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>    
-                    <PublicIcon className="app-menu-icon" style={{ fontSize: 50 }} />
-                    <span className="app-menu-label" style={{ fontSize: 14 }}>World Clock</span>
                 </div>
             </IconButton>
           </Grid>

@@ -96,7 +96,7 @@ const GifChooser = () => {
         </Box>
       )}
       
-      <Button onClick={handleSendGifUrl} variant="contained" sx={{ marginTop: 2, backgroundColor: '#47585F'}}>Send GIF</Button>
+      <Button onClick={handleSendGifUrl} variant="contained" sx={{ marginTop: 2, backgroundColor: '#47585F'}}>Load GIF</Button>
     </div>
   );
 };

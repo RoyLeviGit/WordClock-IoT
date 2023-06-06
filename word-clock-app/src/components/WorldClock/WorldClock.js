@@ -34,7 +34,6 @@ const WorldClock = () => {
 
   return (
     <div className='world-clock'>
-        <h2>World Clock</h2>
         <Autocomplete style={{width: 300, margin:10}}
         value={selectedCountry}
         onChange={(event, newValue) => {
@@ -45,7 +44,7 @@ const WorldClock = () => {
           <TextField {...params} label="Choose a country" variant="outlined" />
         )}
         />
-        <Button style={{margin:10}} variant="contained" onClick={handleCountryChange} sx={{ backgroundColor: '#47585F' }}>Change</Button>
+        <Button style={{margin:10}} variant="contained" onClick={handleCountryChange} sx={{ backgroundColor: '#47585F' }}>Change Time Zone</Button>
         <div>The current country is: {selectedCountry}</div>
     </div>
   );
