@@ -7,7 +7,7 @@ import AddReactionIcon from '@mui/icons-material/AddReaction';
 import ShowChartIcon from '@mui/icons-material/ShowChart';
 import Looks6Icon from '@mui/icons-material/Looks6';
 
-
+import Themes from '../Themes/Themes';
 import WorldClock from '../WorldClock/WorldClock';
 import GameMode from '../GameMode/GameMode';
 import GameModePong from '../GameModePong/GameModePong';
@@ -64,23 +64,25 @@ const AppMenu = () => {
            fetchWordClock();
            return (
             <div style={{display: 'flex', alignItems: 'center', flexDirection: 'column'}}>
-                <h2 >
+                <h2>
                     Word Clock
                 </h2>
                 <ColorPalette/>
                 <WorldClock/>
+                <Themes/>
             </div>
            )
         }
         else if(featureComponent === 'Digital Clock') {
             fetchDigitalClock();
             return (
-                <div style={{display: 'flex', alignItems: 'center', flexDirection: 'column'}}>
+            <div style={{display: 'flex', alignItems: 'center', flexDirection: 'column'}}>
                 <h2 >
                     Digital Clock
                 </h2>
                 <ColorPalette/>
                 <WorldClock/>
+                <Themes/>
             </div>
                )
         }

@@ -45,7 +45,6 @@ const WorldClock = () => {
         )}
         />
         <Button style={{margin:10}} variant="contained" onClick={handleCountryChange} sx={{ backgroundColor: '#47585F' }}>Change Time Zone</Button>
-        <div>The current country is: {selectedCountry}</div>
     </div>
   );
 };
