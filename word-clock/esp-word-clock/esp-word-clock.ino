@@ -11,8 +11,8 @@
 // const char* password = "Boobie1998";
 const char* ssid = "Nadav iPhone";
 const char* password = "01111997";
-// const char* ssid = "TechPublic";
-// const char* password = "";
+// const char* ssid = "CS_conference";
+// const char* password = "openday23";
 
 #define PIN       5 // NeoPixel data pin
 #define NUMPIXELS 132 // Number of pixels in your matrix (11x12)
@@ -48,36 +48,31 @@ void loop() {
   WiFiClient client = server.available(); // Listen for incoming clients
 
   if (client) {
-    String all_request = client.readString(); // Read all incoming data
+    while (client.connected()) {
+      if (client.available()) {
+        String request = client.readStringUntil('\n');
+        // client.flush();
 
-    int startIndex = 0;
-    int endIndex = all_request.indexOf('\n');
-    while (endIndex != -1) {
-      String request = all_request.substring(startIndex, endIndex);
+        // Record the start time
+        unsigned long start_time = millis();
 
-      // Record the start time
-      unsigned long start_time = millis();
+        Serial.print(request.c_str());
+        // Example command format: "C123,255,255,255" (Set pixel 123 to RGB color 255,255,255)
+        if (request.startsWith("C")) {
+          int pixelIndex = request.substring(1, request.indexOf(',')).toInt();
+          int red = request.substring(request.indexOf(',') + 1, request.indexOf(',', request.indexOf(',') + 1)).toInt();
+          int green = request.substring(request.indexOf(',', request.indexOf(',') + 1) + 1, request.indexOf(',', request.indexOf(',', request.indexOf(',') + 1) + 1)).toInt();
+          int blue = request.substring(request.indexOf(',', request.indexOf(',', request.indexOf(',') + 1) + 1) + 1).toInt();
 
-      Serial.print(request.c_str());
-      // Example command format: "C123,255,255,255" (Set pixel 123 to RGB color 255,255,255)
-      if (request.startsWith("C")) {
-        int pixelIndex = request.substring(1, request.indexOf(',')).toInt();
-        int red = request.substring(request.indexOf(',') + 1, request.indexOf(',', request.indexOf(',') + 1)).toInt();
-        int green = request.substring(request.indexOf(',', request.indexOf(',') + 1) + 1, request.indexOf(',', request.indexOf(',', request.indexOf(',') + 1) + 1)).toInt();
-        int blue = request.substring(request.indexOf(',', request.indexOf(',', request.indexOf(',') + 1) + 1) + 1).toInt();
-
-        // Set pixel color and show the change
-        pixels.setPixelColor(pixelIndex, pixels.Color(red, green, blue));
-        pixels.setPixelColor(pixelIndex, pixels.Color(red, green, blue));
-      } else if (request.startsWith("S")) {
-        pixels.show();
-        Serial.printf("\nframe time:%lu\n", millis() - frame_time);
-        frame_time = millis();
+          // Set pixel color and show the change
+          pixels.setPixelColor(pixelIndex, pixels.Color(red, green, blue));
+        } else if (request.startsWith("S")) {
+          pixels.show();
+          Serial.printf("\nframe time:%lu\n", millis() - frame_time);
+          frame_time = millis();
+        }
+        Serial.printf(" command time:%lu\n", millis() - start_time);
       }
-      Serial.printf(" command time:%lu\n", millis() - start_time);
-
-      startIndex = endIndex + 1;
-      endIndex = all_request.indexOf('\n', startIndex);
     }
     client.stop(); // Close the connection
   }

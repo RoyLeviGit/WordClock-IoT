@@ -18,7 +18,7 @@ class LedMatrix:
         # self.get_socket = get_socket
         # self.socket = self.get_socket()
         self.send_commands = send_commands
-        self.show()
+        # self.show()
 
     def get_pixel(self, i, j):
         index = self._get_pixel_index(i, j)
@@ -53,24 +53,8 @@ class LedMatrix:
             # print(f"Sending:\n{commands}")
             if self.debug_no_socket:
                 return
-
-            try:
-                # Send the commands over the network socket
-                self.send_commands(commands.encode())
-                # self.socket.sendall(commands.encode())
-                # print(f"Sent commands:\n{commands}")
-            except socket.error:
-                print("Refreshing socket connection")
-                # self.socket.close()
-                # perform reconnection
-                # self.socket = self.get_socket()
-
-                print("Clearing and reshowing")
-                self.clear()
-                self.show()
-
-                # self.socket.sendall(commands.encode())
-                # print(f"Sent commands:\n{commands}")
+            
+            self.send_commands(commands.encode())
 
     def _get_pixel_index(self, i, j):
         if i % 2 == 0:

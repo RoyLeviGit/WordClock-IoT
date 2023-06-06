@@ -27,25 +27,28 @@ app.add_middleware(
     allow_headers=["*"],  # Set the allowed headers here.
 )
 
+sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+once = False
+
 #socket
 def send_commands(encoded_commands):
-    sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    sock.connect(("172.20.10.4", 80))
-
-    # total_sent = 0
-    # commands_len = len(encoded_commands)
-    # while total_sent < commands_len:
-    #     sent = sock.send(encoded_commands[total_sent:])
-    #     if sent == 0:
-    #         raise RuntimeError("Socket connection broken")
-    #     total_sent += sent
-
-    sock.sendall(encoded_commands)
-    
-    sock.close()
-
+    try:
+        # Send the commands over the network socket
+        sock.sendall(encoded_commands)
+    except socket.error:
+        print("Refreshing socket connection:", str(socket.error))
+        sock.connect(("172.20.10.4", 80))
+        sock.sendall(encoded_commands)
 
     print(f"Sent commands:\n{encoded_commands} sock", sock)
+
+@app.on_event("startup")
+async def startup_event():
+    sock.connect(("172.20.10.4", 80))
+
+@app.on_event("shutdown")
+async def shutdown_event():
+    sock.close()
 
 
 # Global variables.
@@ -266,7 +269,7 @@ async def game_keypress(key: str):
         cancel_current_task()
         return {"message": "Game stopped."}
 
-    current_game.handle_key(key)
+    await current_game.handle_key(key)
     return {"message": f"Processed keypress: {key} for {current_game}"}
 
 if __name__ == "__main__":
