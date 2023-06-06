@@ -1,24 +1,24 @@
 import socket
 
+# def get_socket():
+#     global sock
+#     # if self.debug_no_socket:
+#     #     return None
+#     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+#     sock.connect(("172.20.10.4", 80))
+#     return soc
 
 class LedMatrix:
-    def __init__(self, ip_address, port=80, rows=11, cols=12, debug_no_socket=False):
-        self.ip_address = ip_address
-        self.port = port
+    def __init__(self, send_commands, rows=11, cols=12, debug_no_socket=False):
         self.rows = rows
         self.cols = cols
         self.pixels = [(0, 0, 0)] * (rows * cols)
         self.last_pixels = [(1, 1, 1)] * (rows * cols)
         self.debug_no_socket = debug_no_socket
-        self.socket = self._get_socket()
+        # self.get_socket = get_socket
+        # self.socket = self.get_socket()
+        self.send_commands = send_commands
         self.show()
-
-    def _get_socket(self):
-        if self.debug_no_socket:
-            return None
-        sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        sock.connect((self.ip_address, self.port))
-        return sock
 
     def get_pixel(self, i, j):
         index = self._get_pixel_index(i, j)
@@ -56,15 +56,20 @@ class LedMatrix:
 
             try:
                 # Send the commands over the network socket
-                self.socket.sendall(commands.encode())
+                self.send_commands(commands.encode())
+                # self.socket.sendall(commands.encode())
                 # print(f"Sent commands:\n{commands}")
             except socket.error:
                 print("Refreshing socket connection")
-                self.socket.close()
+                # self.socket.close()
                 # perform reconnection
-                self.socket = self._get_socket()
+                # self.socket = self.get_socket()
 
-                self.socket.sendall(commands.encode())
+                print("Clearing and reshowing")
+                self.clear()
+                self.show()
+
+                # self.socket.sendall(commands.encode())
                 # print(f"Sent commands:\n{commands}")
 
     def _get_pixel_index(self, i, j):

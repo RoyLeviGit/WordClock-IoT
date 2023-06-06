@@ -8,6 +8,7 @@ from matrix import LedMatrix
 class PongGame:
     def __init__(self, matrix: LedMatrix):
         self.matrix = matrix
+        self.matrix.clear()
         self.paddle1 = [5, 6, 7]  # Vertical positions of the paddle
         self.paddle2 = [5, 6, 7]
         self.ball = [5, 5]  # Position of the ball

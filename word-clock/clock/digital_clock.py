@@ -19,6 +19,7 @@ class DigitalClock:
 
     def __init__(self, matrix: LedMatrix):
         self.matrix = matrix
+        self.matrix.clear()
         self.color = (255, 255, 255)
 
     def draw_char(self, char, x, y, color):

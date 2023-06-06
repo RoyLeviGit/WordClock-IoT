@@ -8,6 +8,7 @@ from matrix import LedMatrix
 class SnakeGame:
     def __init__(self, matrix: LedMatrix):
         self.matrix = matrix
+        self.matrix.clear()
         self.snake = [(5, 5)]
         self.direction = (0, 1)  # Start moving to the right
         self.apple = self._new_apple()
@@ -54,7 +55,7 @@ class SnakeGame:
 
     def stop_game(self):
         self.is_playing = False
-        if self.thread is not None:
+        if self.thread:
             self.thread.join()
             self.thread = None
 

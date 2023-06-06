@@ -1,6 +1,8 @@
 import asyncio
 import os
 import shutil
+import socket
+import numpy as np
 from typing import Union
 from fastapi import FastAPI, File, HTTPException, UploadFile
 import httpx
@@ -25,9 +27,31 @@ app.add_middleware(
     allow_headers=["*"],  # Set the allowed headers here.
 )
 
-matrix = LedMatrix(ip_address="172.20.10.2", rows=11, cols=12, debug_no_socket=True)
+#socket
+def send_commands(encoded_commands):
+    sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    sock.connect(("172.20.10.4", 80))
+
+    # total_sent = 0
+    # commands_len = len(encoded_commands)
+    # while total_sent < commands_len:
+    #     sent = sock.send(encoded_commands[total_sent:])
+    #     if sent == 0:
+    #         raise RuntimeError("Socket connection broken")
+    #     total_sent += sent
+
+    sock.sendall(encoded_commands)
+    
+    sock.close()
+
+
+    print(f"Sent commands:\n{encoded_commands} sock", sock)
+
 
 # Global variables.
+matrix = LedMatrix(send_commands, rows=11, cols=12, debug_no_socket=False)
+# send_commands(f"C{np.random()},255,255,255\nS\n".encode())
+# send_commands(f"C1,255,255,255\nS\n".encode())
 current_task = None
 current_clock = None
 last_clock = None
@@ -35,13 +59,16 @@ current_timezone = None
 current_game = None
 last_game = None
 gif_player = GifPlayer(matrix)
+# gif_player = None
 
 def cancel_current_task():
     global current_task, gif_player, current_game
     if current_task:
         current_task.cancel()
         current_task = None
-    gif_player.stop_gif()
+    if gif_player:
+        gif_player.stop_gif()
+        # gif_player = None
     if current_game:
         current_game.stop_game()
         current_game = None
@@ -102,11 +129,15 @@ class Color(BaseModel):
 @app.post("/send-color")
 async def send_color(color_data: Color):
     global current_clock
+    # send_commands(f"C30,0,255,255\nS\n".encode())
     if current_clock:
         try:
             # change_color method is assumed to be async
             current_clock.color = color_data.to_rgb()
             current_clock.draw_time(datetime.now())
+
+            # send_commands(f"C30,255,255,0\nS\n".encode())
+
             return {"message": "Color changed successfully."}
         except Exception as e:
             raise HTTPException(status_code=400, detail=str(e))

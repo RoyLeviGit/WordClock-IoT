@@ -20,6 +20,7 @@ class WordClock:
             "TENSEZOCLOCK",
         ]
         self.matrix = matrix
+        self.matrix.clear()
         self.color = (255, 255, 255)
 
     def draw_time(self, time_to_draw: datetime):
