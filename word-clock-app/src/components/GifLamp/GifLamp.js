@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Tabs, Tab, Box, TextField, Button } from '@mui/material';
+import { Tabs, Tab, Box, TextField, Button, Typography } from '@mui/material';
 import "./GifLamp.css";
 
 const GifChooser = () => {
@@ -85,15 +85,20 @@ const GifChooser = () => {
         </Box>
       )}
       {tabIndex === 2 && (
-        <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center',  margin: 2 }}>
-          <Box
-            sx={{ width: '80%', height: 100, border: '2px dashed grey' }}
-            onDrop={handleGifDrop}
-            onDragOver={(event) => event.preventDefault()}
-          >
-            {gifUrl ? <img src={gifUrl} alt="Dragged GIF" /> : 'Drag and drop a GIF here'}
+        <div>
+          <h3 style={{ textAlign: 'center' }}>
+            GIF Preview
+          </h3>
+          <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', margin: 2 }}>
+            <Box
+              sx={{ width: 200, height: 200, border: '2px dashed grey' }}
+              onDrop={handleGifDrop}
+              onDragOver={(event) => event.preventDefault()}
+            >
+              {gifUrl ? <img src={gifUrl} style={{ width: 200, height: 200 }} alt="Dragged GIF" /> : 'Drag and drop a GIF here'}
+            </Box>
           </Box>
-        </Box>
+        </div> 
       )}
       
       <Button onClick={handleSendGifUrl} variant="contained" sx={{ marginTop: 2, backgroundColor: '#47585F'}}>Load GIF</Button>
