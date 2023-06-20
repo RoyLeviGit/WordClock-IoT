@@ -91,9 +91,10 @@ async def word_clock():
 
     async def draw_clock_periodically():
         global current_clock
+        current_clock = WordClock(matrix)
+
         while True:
             time_to_draw = get_current_time()
-            current_clock = WordClock(matrix)
             current_clock.draw_time(time_to_draw)
             await asyncio.sleep(60)  # Wait for 1 minute
 
@@ -110,9 +111,10 @@ async def digital_clock():
 
     async def draw_clock_periodically():
         global current_clock
+        current_clock = DigitalClock(matrix)
+
         while True:
             time_to_draw = get_current_time()
-            current_clock = DigitalClock(matrix)
             current_clock.draw_time(time_to_draw)
             await asyncio.sleep(60)  # Wait for 1 minute
 
