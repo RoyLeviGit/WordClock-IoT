@@ -10,6 +10,7 @@ const Themes = () => {
   };
 
   const handleSetTheme = () => {
+    console.log(selectedTheme);
     // Send fetch request to the backend with the selected theme
     fetch('/set-theme', {
       method: 'POST',
@@ -41,10 +42,15 @@ const Themes = () => {
                 label="Select Theme"
                 onChange={handleChange}
                 >
-                <MenuItem value="theme1">Holiday</MenuItem>
-                <MenuItem value="theme2">Birthday</MenuItem>
-                <MenuItem value="theme3">Random</MenuItem>
-                {/* Add more menu items for different themes */}
+                <MenuItem value="christmas">Christmas</MenuItem>
+                <MenuItem value="easter">Easter</MenuItem>
+                <MenuItem value="carnival">Carnival</MenuItem>
+                <MenuItem value="hanukkah">Hanukkah</MenuItem>
+                <MenuItem value="purim">Purim</MenuItem>
+                <MenuItem value="sukkot">Sukkot</MenuItem>
+                <MenuItem value="eid-al-fitr">Eid al-Fitr</MenuItem>
+                <MenuItem value="eid-al-adha">Eid al-Adha</MenuItem>
+                <MenuItem value="milad-un-nabi">Milad un-Nabi</MenuItem>
                 </Select>
             </FormControl>
         </div>
