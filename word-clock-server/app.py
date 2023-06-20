@@ -136,7 +136,7 @@ async def send_color(color_data: Color):
         try:
             # change_color method is assumed to be async
             current_clock.color = [color_data.to_rgb()]
-            current_clock.draw_time(datetime.now())
+            current_clock.draw_time(get_current_time())
 
             return {"message": "Color changed successfully."}
         except Exception as e:
@@ -210,7 +210,7 @@ async def set_theme(theme_request: ThemeRequest):
         try:
             # change_color method is assumed to be async
             current_clock.color = theme_request.to_rgb()
-            current_clock.draw_time(datetime.now())
+            current_clock.draw_time(get_current_time())
 
             return {"message": "Theme changed successfully."}
         except Exception as e:

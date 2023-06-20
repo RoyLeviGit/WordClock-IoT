@@ -34,7 +34,7 @@ class WordClock:
         for word in words:
             pixel_indexes = self._get_pixel_index(word)
             for index in pixel_indexes:
-                self.matrix.set_pixel(index[0], index[1], self.color[index % len(self.color)])
+                self.matrix.set_pixel(index[0], index[1], self.color[index[0] % len(self.color)])
         
         self.matrix.show()
 
@@ -43,6 +43,10 @@ class WordClock:
         if word == "FFIVE":
             word = "FIVE"
             r = True
+        if word == "TTEN":
+            word = "TEN"
+            r = True
+
         for i in (reversed(range(len(self.grid))) if r else range(len(self.grid))):
             start = self.grid[i].find(word)
             if start != -1:
@@ -102,7 +106,7 @@ class WordClock:
         elif hour == 9 or hour == 21:
             words_to_light.append("NINE")
         elif hour == 10 or hour == 22:
-            words_to_light.append("TEN")
+            words_to_light.append("TTEN")
         elif hour == 11 or hour == 23:
             words_to_light.append("ELEVEN")
         else:  # hour == 12 or hour == 0
