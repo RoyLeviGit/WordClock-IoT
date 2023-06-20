@@ -37,6 +37,7 @@ def send_commands(encoded_commands):
         sock.sendall(encoded_commands)
     except socket.error:
         print("Refreshing socket connection:", str(socket.error))
+        sock.close()
         sock.connect(("172.20.10.4", 80))
         sock.sendall(encoded_commands)
 
