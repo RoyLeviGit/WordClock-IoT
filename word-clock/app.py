@@ -132,14 +132,11 @@ class Color(BaseModel):
 @app.post("/send-color")
 async def send_color(color_data: Color):
     global current_clock
-    # send_commands(f"C30,0,255,255\nS\n".encode())
     if current_clock:
         try:
             # change_color method is assumed to be async
-            current_clock.color = color_data.to_rgb()
+            current_clock.color = [color_data.to_rgb()]
             current_clock.draw_time(datetime.now())
-
-            # send_commands(f"C30,255,255,0\nS\n".encode())
 
             return {"message": "Color changed successfully."}
         except Exception as e:
@@ -173,6 +170,53 @@ async def change_country(country_request: CountryRequest):
     elif last_clock == "digital":
         await digital_clock()
     return {"message": "Country changed successfully."}
+
+class ThemeRequest(BaseModel):
+    theme: str
+
+    def to_rgb(self):
+        color_dict = {
+            # Christianity
+            "christmas": ["#FF0000", "#00FF00", "#FFD700"],     # Red, Green, Gold
+            "easter": ["#EE82EE", "#FFFFFF", "#FFFF00"],        # Purple, White, Yellow
+            "carnival": ["#FF1493", "#FFD700", "#00FFFF"],      # Deep Pink, Gold, Cyan
+
+            # Judaism
+            "hanukkah": ["#0000FF", "#C0C0C0", "#FFD700"],      # Blue, Silver, Gold
+            "purim": ["#FF00FF", "#FFFF00", "#00FF00"],         # Magenta, Yellow, Green
+            "sukkot": ["#FFA500", "#FFFFFF", "#8B4513"],        # Orange, White, Saddle Brown
+
+            # Islam
+            "eid-al-fitr": ["#008000", "#FFFF00", "#FFFFFF"],   # Green, Yellow, White
+            "eid-al-adha": ["#8B4513", "#FFFFFF", "#FFD700"],    # Saddle Brown, White, Gold
+            "milad-un-nabi": ["#008000", "#FFFFFF", "#FFD700"]   # Green, White, Gold
+        }
+        hex_colors = color_dict[self.theme]
+        rgb_colors = []
+        for color in hex_colors:
+            color = color.lower()
+            rgb_colors.append((
+                int(color[1:3], 16),
+                int(color[3:5], 16),
+                int(color[5:7], 16),
+            ))
+        return rgb_colors
+
+
+@app.post("/set-theme")
+async def set_theme(theme_request: ThemeRequest):
+    global current_clock
+    if current_clock:
+        try:
+            # change_color method is assumed to be async
+            current_clock.color = theme_request.to_rgb()
+            current_clock.draw_time(datetime.now())
+
+            return {"message": "Theme changed successfully."}
+        except Exception as e:
+            raise HTTPException(status_code=400, detail=str(e))
+    else:
+        raise HTTPException(status_code=400, detail="No clock is currently running.")
 
 class GifUrl(BaseModel):
     gifUrl: str

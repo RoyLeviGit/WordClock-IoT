@@ -21,7 +21,7 @@ class WordClock:
         ]
         self.matrix = matrix
         self.matrix.clear()
-        self.color = (255, 255, 255)
+        self.color = [(255, 255, 255)]
 
     def draw_time(self, time_to_draw: datetime):
         hour = time_to_draw.hour
@@ -34,7 +34,7 @@ class WordClock:
         for word in words:
             pixel_indexes = self._get_pixel_index(word)
             for index in pixel_indexes:
-                self.matrix.set_pixel(index[0], index[1], self.color)
+                self.matrix.set_pixel(index[0], index[1], self.color[index % len(self.color)])
         
         self.matrix.show()
 

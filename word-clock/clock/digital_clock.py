@@ -20,13 +20,13 @@ class DigitalClock:
     def __init__(self, matrix: LedMatrix):
         self.matrix = matrix
         self.matrix.clear()
-        self.color = (255, 255, 255)
+        self.color = [(255, 255, 255)]
 
     def draw_char(self, char, x, y, color):
         for i, line in enumerate(self.NUMBERS[char]):
             for j, pixel in enumerate(line):
                 if pixel == "#":
-                    self.matrix.set_pixel(x + i, y + j, color)
+                    self.matrix.set_pixel(x + i, y + j, color[(x + i) % len(color)])
 
     def draw_time(self, time_to_draw: datetime):
         hour_str = time_to_draw.strftime("%H")
