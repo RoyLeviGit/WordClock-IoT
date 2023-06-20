@@ -26,6 +26,10 @@ void setup() {
   pixels.begin();
   pixels.show(); // Initialize all pixels to 'off'
 
+  setup_wifi();
+}
+
+void setup_wifi() {
   // Connect to Wi-Fi
   Serial.print("Connecting to ");
   Serial.println(ssid);
@@ -45,6 +49,9 @@ void setup() {
 unsigned long frame_time = millis();
 
 void loop() {
+  if(WiFi.status() != WL_CONNECTED) {
+    setup_wifi();    
+  }
   WiFiClient client = server.available(); // Listen for incoming clients
 
   if (client) {

@@ -163,15 +163,15 @@ async def change_country(country_request: CountryRequest):
     except KeyError:
         raise ValueError("Invalid country name.")
 
-    global last_clock
-    if not last_clock:
-        return {"message": "No clock is currently running."}
-    
-    if last_clock == "word":
-        await word_clock()
-    elif last_clock == "digital":
-        await digital_clock()
-    return {"message": "Country changed successfully."}
+    global current_clock
+    if current_clock:
+        try:
+            current_clock.draw_time(get_current_time())
+            return {"message": "Country changed successfully."}
+        except Exception as e:
+            raise HTTPException(status_code=400, detail=str(e))
+    else:
+        raise HTTPException(status_code=400, detail="No clock is currently running.")
 
 class ThemeRequest(BaseModel):
     theme: str
