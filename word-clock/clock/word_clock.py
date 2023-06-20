@@ -29,19 +29,22 @@ class WordClock:
         words = self._words_to_light(hour, minute)
 
         # Set pixels for the words to light up
-        reverse = False
+        self.matrix.clear()
+
         for word in words:
-            pixel_indexes = self._get_pixel_index(word, reverse)
+            pixel_indexes = self._get_pixel_index(word)
             for index in pixel_indexes:
                 self.matrix.set_pixel(index[0], index[1], self.color)
-            if words.count(word) > 1:
-                reverse = True
         
         self.matrix.show()
 
-    def _get_pixel_index(self, word, reverse):
-        for i in range(len(self.grid)):
-            start = self.grid[i].rfind(word) if reverse else self.grid[i].find(word)
+    def _get_pixel_index(self, word):
+        r = False
+        if word == "FFIVE":
+            word = "FIVE"
+            r = True
+        for i in (reversed(range(len(self.grid))) if r else range(len(self.grid))):
+            start = self.grid[i].find(word)
             if start != -1:
                 return [(i, j) for j in range(start, start + len(word))]
         return []
@@ -89,7 +92,7 @@ class WordClock:
         elif hour == 4 or hour == 16:
             words_to_light.append("FOUR")
         elif hour == 5 or hour == 17:
-            words_to_light.append("FIVE")
+            words_to_light.append("FFIVE")
         elif hour == 6 or hour == 18:
             words_to_light.append("SIX")
         elif hour == 7 or hour == 19:

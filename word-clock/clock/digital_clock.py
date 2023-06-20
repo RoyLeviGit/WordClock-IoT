@@ -35,6 +35,8 @@ class DigitalClock:
         x_h, y_h = 0, 2  # Start position for hours (top middle)
         x_m, y_m = 6, 2  # Start position for minutes (bottom middle)
 
+        self.matrix.clear()
+
         # Draw hours
         for char in hour_str:
             self.draw_char(char, x_h, y_h, self.color)
