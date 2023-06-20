@@ -68,9 +68,14 @@ const GifChooser = () => {
         </Tabs>
       </div>
       {tabIndex === 0 && (
-        <Box sx={{ display: 'flex', flexWrap: 'wrap', margin: 2, height: 100, justifyContent: 'flex-end', alignItems: 'center' }}>
-          <input type="file" onChange={event => setGifUrl(URL.createObjectURL(event.target.files[0]))} /> 
+        <div>
+          <h3 style={{ textAlign: 'center' }}>
+            Select a file directly from your device:
+          </h3>
+          <Box sx={{ display: 'flex', flexWrap: 'wrap', margin: 2, height: 100, justifyContent: 'flex-end', alignItems: 'center' }}>
+            <input type="file" onChange={event => setGifUrl(URL.createObjectURL(event.target.files[0]))} /> 
         </Box>
+        </div>
       )}
       {tabIndex === 1 && (
         <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center',  margin: 2, height: 100 }}>

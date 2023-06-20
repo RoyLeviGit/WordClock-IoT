@@ -29,6 +29,9 @@ const GameMode = ({ updateFeatureComponent, fetchWordClock }) => {
 
   return (
     <div className='div-game-mode'>
+      <h2>
+        Snake Game
+      </h2>
       <div className='div-up'>
         <IconButton className='game-button' size='large' variant="contained" onClick={() => handleButtonClick('up')}>
           <ArrowCircleUpIcon style={{ fontSize: 60 }} />

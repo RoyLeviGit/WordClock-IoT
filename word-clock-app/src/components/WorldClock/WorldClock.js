@@ -21,16 +21,31 @@ const WorldClock = () => {
 
  
   const handleCountryChange = async () => {
-    const response = await fetch('/change-country', {
-      method: 'POST',
-      body: JSON.stringify({ country: selectedCountry }),
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    });
-    const data = await response.json();
-    console.log(data);
+    try {
+      const response = await fetch('/change-country', {
+        method: 'POST',
+        body: JSON.stringify({ country: selectedCountry }),
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+      const data = await response.json();
+      console.log(data);
+    } catch (error) {
+      console.error(error);
+      // Make another call to the backend with the state of "israel"
+      const response = await fetch('/change-country', {
+        method: 'POST',
+        body: JSON.stringify({ country: 'israel' }),
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+      const data = await response.json();
+      console.log(data);
+    }
   };
+  
 
   return (
     <div className='world-clock'>
