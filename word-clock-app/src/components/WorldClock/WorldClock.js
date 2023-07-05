@@ -7,7 +7,7 @@ import "./WorldClock.css";
 
 const WorldClock = () => {
   const [countries, setCountries] = useState([]);
-  const [selectedCountry, setSelectedCountry] = useState('United States');
+  const [selectedCountry, setSelectedCountry] = useState('');
 
   useEffect(() => {
     const fetchCountries = async () => {
