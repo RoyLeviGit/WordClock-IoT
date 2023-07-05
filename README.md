@@ -18,7 +18,7 @@ Gaming Fun: Take a break from timekeeping and indulge in classic Snake and Pong 
 GIF Lamp Integration: Elevate the visual appeal of your Word Clock by loading and displaying captivating GIFs. Transform your clock into an enchanting lamp, creating a mesmerizing ambiance in any room.
 
 Team Collaboration
-The Word Clock is the result of the dedicated collaboration between our talented team members, Nadav Naveh, Michal Galin, and Roy Levi. Through our combined skills, expertise, and shared vision, we have successfully brought this extraordinary project to life. We extend our special thanks to [Friend 1] and [Friend 2] for their unwavering commitment, creativity, and technical prowess. Their contributions have been invaluable to the project's success.
+The Word Clock is the result of the dedicated collaboration between our talented team members, Nadav Naveh, Michal Galin, and Roy Levi. Through our combined skills, expertise, and shared vision, we have successfully brought this extraordinary project to life.
 
 Project Significance
 The Word Clock represents our deep dive into the fascinating landscape of IoT. It serves as a testament to our passion for innovation and our drive to push boundaries. Through this project, we have explored new possibilities, challenged traditional concepts, and fostered an environment of continuous learning and growth. We take immense pride in the implementation of the Word Clock and the unique experiences it offers to users.
