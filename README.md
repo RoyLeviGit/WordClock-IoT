@@ -38,3 +38,6 @@ If you are interested in learning more about our project or have any inquiries, 
 - `tests`: Inside this folder, you will find comprehensive tests for the backend Python server. We have rigorously tested the functionality to ensure a reliable and robust performance.
 - `word-clock-app`: This folder encompasses the web application that powers the Word Clock. It has been meticulously crafted using React.js, delivering a seamless and immersive user experience.
 - `word-clock-server`: The backend server, written in Python with FastAPI as the middleware, resides in this folder. It forms the backbone of the Word Clock system, facilitating efficient communication and handling various requests.
+
+## Arduino/ESP32 libraries used in this project:
+- `Adafruit_NeoPixel` : 1.11.0
