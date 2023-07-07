@@ -42,4 +42,5 @@ If you are interested in learning more about our project or have any inquiries, 
 ## Arduino/ESP32 libraries used in this project:
 - `Adafruit_NeoPixel` : 1.11.0
 
+## Project's poster:
 ![Project's poster:](./assets/wordclock-poster.jpg)
