@@ -34,9 +34,9 @@ The Word Clock represents our deep dive into the fascinating landscape of IoT. I
 If you are interested in learning more about our project or have any inquiries, please feel free to reach out to us. We would be delighted to share further insights, provide detailed explanations, and discuss our experiences throughout the development process.
 
 ## Folder Description
-- `esp-word-clock`: This directory contains all the relevant files for the ESP32 functionality, enabling seamless integration and control of the Word Clock.
-- `tests`: Inside this folder, you will find comprehensive tests for the backend Python server. We have rigorously tested the functionality to ensure a reliable and robust performance.
-- `word-clock-app`: This folder encompasses the web application that powers the Word Clock. It has been meticulously crafted using React.js, delivering a seamless and immersive user experience.
+- `esp-word-clock`: This directory contains all the relevant files for the ESP32 functionality, enabling integration and control of the Word Clock.
+- `tests`: Inside this folder, you will find tests for the backend Python server. We have tested the functionality to ensure a reliable and robust performance, especially in terms of communication.
+- `word-clock-app`: This folder encompasses the web application that powers the Word Clock. It has been crafted using React.js, delivering a seamless and immersive user experience.
 - `word-clock-server`: The backend server, written in Python with FastAPI as the middleware, resides in this folder. It forms the backbone of the Word Clock system, facilitating efficient communication and handling various requests.
 
 ## Arduino/ESP32 libraries used in this project:
