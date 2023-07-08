@@ -29,6 +29,8 @@ app.add_middleware(
 
 sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 once = False
+# Place your ESP32 IP
+esp_ip = "172.20.10.4"
 
 #socket
 def send_commands(encoded_commands):
@@ -38,14 +40,14 @@ def send_commands(encoded_commands):
     except socket.error:
         print("Refreshing socket connection:", str(socket.error))
         sock.close()
-        sock.connect(("172.20.10.4", 80))
+        sock.connect((esp_ip, 80))
         sock.sendall(encoded_commands)
 
     print(f"Sent commands:\n{encoded_commands} sock", sock)
 
 @app.on_event("startup")
 async def startup_event():
-    sock.connect(("172.20.10.4", 80))
+    sock.connect((esp_ip, 80))
 
 @app.on_event("shutdown")
 async def shutdown_event():
